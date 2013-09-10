@@ -224,48 +224,38 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
         evt.preventDefault();
 
 
+
         if (evt.which === 40) {
           scope.activeIdx = (scope.activeIdx + 1) % scope.matches.length;
           scope.$digest();
-          
-          var oTop = angular.element(popUpEl).find('li').get(scope.activeIdx).offsetTop;
-          var elH = angular.element(popUpEl).find('li').eq(scope.activeIdx).height();
+
+          var liEl = angular.element(popUpEl).find('li');
+          var oTop = liEl.get(scope.activeIdx).offsetTop;
+          var elH = liEl.eq(scope.activeIdx).height();
           var ulH = angular.element(popUpEl).height();
 
           if(scope.activeScroll < oTop) {
-
             popUpEl[0].scrollTop = oTop - ulH + elH*2;
             scope.activeScroll = oTop;
           }
-
-          // TODO before digest!
           if(scope.activeIdx == 0){
             popUpEl[0].scrollTop = 0;
             scope.activeScroll = ulH;
           }
 
-
         } else if (evt.which === 38) {
           scope.activeIdx = (scope.activeIdx ? scope.activeIdx : scope.matches.length) - 1;
           scope.$digest();
           
-          var oTop = angular.element(popUpEl).find('li').get(scope.activeIdx).offsetTop;
-          var elH = angular.element(popUpEl).find('li').eq(scope.activeIdx).height();
+          var liEl = angular.element(popUpEl).find('li');
+          var oTop = liEl.get(scope.activeIdx).offsetTop;
+          var elH = liEl.eq(scope.activeIdx).height();
           var ulH = angular.element(popUpEl).height();
 
-          if(scope.activeScroll > oTop+ulH) {
-
+          if(scope.activeScroll > oTop+ulH || scope.activeIdx == scope.matches.length - 1){
             popUpEl[0].scrollTop = oTop;
             scope.activeScroll = oTop+ulH;
           }
-
-
-          if(scope.activeIdx == scope.matches.length - 1){
-            console.log('last')
-          }
-
-        // TODO overgoing (down)
-
 
         } else if (evt.which === 13 || evt.which === 9) {
           scope.$apply(function () {
